@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* custom */
+:root{
+  --teal1: #2ac3b2;
+  --teal2: #40d1bf;
+}
+body {
+  @apply bg-[#f4f7f7] font-sans;
+}
+
+/* header gradient */
+.header-gradient {
+  background: linear-gradient(90deg, rgba(52,199,175,1) 0%, rgba(64,209,191,1) 100%);
+}
+
+/* small card style helper */
+.card {
+  @apply bg-white rounded-2xl p-6 shadow-soft;
+}

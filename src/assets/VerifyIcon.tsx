@@ -1,0 +1,20 @@
+import type { IconProps } from "../types";
+
+export const VerifyIcon = (props: IconProps) => {
+    const { size, color } = props;
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size || "24"}
+            height={size || "24"}
+            viewBox="0 0 24 24"
+            fill="none"
+        >
+            <path
+                stroke={color || "#000"}
+                strokeWidth="2"
+                d="M20 15c-1 1 1.25 3.75 0 5s-4-1-5 0-1.5 3-3 3-2-2-3-3-3.75 1.25-5 0 1-4 0-5-3-1.5-3-3 2-2 3-3-1.25-3.75 0-5 4 1 5 0 1.5-3 3-3 2 2 3 3 3.75-1.25 5 0-1 4 0 5 3 1.5 3 3-2 2-3 3ZM7 12l3 3 7-7"
+            />
+        </svg>
+    );
+};
