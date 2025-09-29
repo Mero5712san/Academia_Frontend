@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchRecentMock } from "../services/api";
+import { fetchRecent } from "../services/api";
 import { CertificateCard } from "../components";
 import type { CertificateResult } from "../types";
 
@@ -8,7 +8,7 @@ export default function Recents() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchRecentMock().then((rows) => {
+        fetchRecent().then((rows) => {
             setItems(rows);
             setLoading(false);
         });

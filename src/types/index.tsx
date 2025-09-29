@@ -4,7 +4,7 @@
 
 
 export interface CertificateResult {
-    id: string;
+    id: string | number;
     filename: string;
     status: "verified" | "fraud" | "unknown";
     confidence?: number;
@@ -15,4 +15,15 @@ export interface CertificateResult {
 export interface IconProps {
     size?: number | string;
     color?: string;
+}
+
+export interface CertificateResult {
+    id: number | string,
+    student_name: string,
+    institution: string,
+    course: string,
+    year_of_pass: number,
+    status: "verified" | "fraud" | "unknown",
+    hash: string,
+    file_path: string,
 }

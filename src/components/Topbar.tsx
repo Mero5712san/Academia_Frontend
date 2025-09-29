@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 export const Topbar = () => {
     // logged-in user mock
-    const user = { name: "Sana ma", avatar: "" };
+    const user = { name: "John Doe", avatar: "" };
 
     return (
         <header className="px-6 py-4 bg-gray-200 border-b border-gray-200">
