@@ -112,3 +112,27 @@ export async function fetchRecent(): Promise<CertificateResult[]> {
     if (!res.ok) throw new Error("Failed to fetch recents");
     return res.json();
 }
+
+export const getCurrentUser = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("No token found");
+
+        const res = await fetch(`${API_BASE_URL}/auth/me`, {
+            headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.detail || "Failed to fetch user");
+        }
+
+        return await res.json();
+    } catch (err) {
+        console.error("Error fetching current user:", err);
+        throw err;
+    }
+};

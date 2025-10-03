@@ -8,7 +8,7 @@ export interface CertificateResult {
     filename: string;
     status: "verified" | "fraud" | "unknown";
     confidence?: number;
-    uploadedAt?: string;
+    uploadedAt?: string | Date;
 }
 
 
@@ -18,12 +18,26 @@ export interface IconProps {
 }
 
 export interface CertificateResult {
-    id: number | string,
-    student_name: string,
-    institution: string,
-    course: string,
-    year_of_pass: number,
-    status: "verified" | "fraud" | "unknown",
-    hash: string,
-    file_path: string,
+    id: string | number;                     // unique id for each result
+    filename: string;               // uploaded file name
+    uploadedAt?: string | Date;      // upload time
+    studentName?: string;
+    course?: string;
+    yearOfPass?: string | number;
+    institution?: string;
+    certificateId?: string;
+
+    status: "verified" | "fraud" | "unknown"; // quick status
+    finalStatus?: string;            // final consolidated status
+
+    hash?: string;                   // file hash
+    confidence?: number;             // detection confidence (0–100)
+
+    validFormat?: boolean | string;
+    hasQr?: boolean | string;
+    qrContent?: string[];
+    logoVerified?: boolean | string;
+    layoutVerified?: boolean | string;
+    duplicateCheck?: boolean | string;
+    hashMatch?: boolean | string;
 }

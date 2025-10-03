@@ -1,16 +1,28 @@
 import React, { useState } from "react";
 import { UploadBox } from "../components";
 import type { CertificateResult } from "../types";
+import { Dialog } from "@headlessui/react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 export default function VerifyCertificates() {
-    const [results, setResults] = useState<CertificateResult[]>([]);
+    const [result, setResult] = useState<CertificateResult | null>(null);
+    const [openModal, setOpenModal] = useState(false);
 
     function handleResult(r: CertificateResult) {
-        setResults((prev) => [r, ...prev]);
+        setResult(r);
     }
 
-    // Helper to show value or "-"
-    const show = (val: any) => (val !== undefined && val !== null && val !== "" ? val : "-");
+    // Pick confidence
+    const confidence = result?.confidence ?? 0;
+
+    // Progress color logic
+    let pathColor = "red"; // red default
+    if (confidence >= 75) pathColor = "green"; // aqua
+    else if (confidence >= 50) pathColor = "orange"; // orange
+
+    const show = (val: string | number | boolean | undefined) =>
+        val !== undefined && val !== null && val !== "" ? val : "-";
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
@@ -23,80 +35,83 @@ export default function VerifyCertificates() {
                     </p>
                 </div>
 
-                {/* Upload Section */}
-                <UploadBox onResult={handleResult} />
+                {/* Two-card layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Upload card */}
+                    <div className="bg-white rounded-xl shadow p-6 flex flex-col justify-center">
+                        <h3 className="text-lg font-semibold mb-4">Upload</h3>
+                        <UploadBox onResult={handleResult} />
+                    </div>
 
-                {/* Results Section */}
-                <div className="mt-8">
-                    <h3 className="text-xl font-semibold mb-4">Results</h3>
-
-                    {results.length === 0 ? (
-                        <div className="bg-white rounded-xl p-6 shadow text-gray-500">
-                            No results yet — upload a file to start.
+                    {/* Progress card */}
+                    <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center justify-between">
+                        <h3 className="text-lg font-semibold mb-4">Confidence</h3>
+                        <div className="w-40 h-40 mb-4">
+                            <CircularProgressbar
+                                value={confidence}
+                                text={`${confidence || 0}%`}
+                                styles={buildStyles({
+                                    textColor: "#374151",
+                                    pathColor,
+                                    trailColor: "#e5e7eb",
+                                })}
+                            />
                         </div>
-                    ) : (
-                        <div className="space-y-8">
-                            {results.map((r) => (
-                                <div
-                                    key={r.id}
-                                    className="bg-white rounded-xl shadow p-6 space-y-6"
-                                >
-                                    {/* Basic Info */}
-                                    <div>
-                                        <h4 className="text-lg font-semibold mb-3">Basic Information</h4>
-                                        <div className="grid grid-cols-2 gap-4 text-sm">
-                                            <div><span className="font-medium">File:</span> {show(r.filename)}</div>
-                                            <div><span className="font-medium">Uploaded:</span> {r.uploadedAt ? new Date(r.uploadedAt).toLocaleString() : "-"}</div>
-                                            <div><span className="font-medium">Student Name:</span> {show(r.studentName)}</div>
-                                            <div><span className="font-medium">Course:</span> {show(r.course)}</div>
-                                            <div><span className="font-medium">Year of Passing:</span> {show(r.yearOfPass)}</div>
-                                            <div><span className="font-medium">Institution:</span> {show(r.institution)}</div>
-                                            <div><span className="font-medium">Certificate ID:</span> {show(r.certificateId)}</div>
-                                            <div>
-                                                <span className="font-medium">Status:</span>{" "}
-                                                <span
-                                                    className={
-                                                        r.status === "verified"
-                                                            ? "text-green-600"
-                                                            : r.status === "fraud"
-                                                                ? "text-red-600"
-                                                                : "text-gray-600"
-                                                    }
-                                                >
-                                                    {show(r.finalStatus?.toUpperCase())}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* File & Security */}
-                                    <div>
-                                        <h4 className="text-lg font-semibold mb-3">File & Security</h4>
-                                        <div className="space-y-2 text-sm">
-                                            <div><span className="font-medium">File Hash:</span> {r.hash ? r.hash.slice(0, 16) + "..." : "-"}</div>
-                                            <div><span className="font-medium">Confidence:</span> {show(r.confidence) + (r.confidence ? "%" : "")}</div>
-                                        </div>
-                                    </div>
-
-                                    {/* Verification (placeholder for future fields) */}
-                                    <div>
-                                        <h4 className="text-lg font-semibold mb-3">Verification Details</h4>
-                                        <div className="grid grid-cols-2 gap-4 text-sm">
-                                            <div><span className="font-medium">Valid Format:</span> {show(r.validFormat)}</div>
-                                            <div><span className="font-medium">Has QR Code:</span> {show(r.hasQr)}</div>
-                                            <div><span className="font-medium">QR Content:</span> {Array.isArray(r.qrContent) && r.qrContent.length ? r.qrContent.join(", ") : "-"}</div>
-                                            <div><span className="font-medium">Logo Verified:</span> {show(r.logoVerified)}</div>
-                                            <div><span className="font-medium">Layout Verified:</span> {show(r.layoutVerified)}</div>
-                                            <div><span className="font-medium">Duplicate Check:</span> {show(r.duplicateCheck)}</div>
-                                            <div><span className="font-medium">Hash Match:</span> {show(r.hashMatch)}</div>
-                                            <div><span className="font-medium">Final Status:</span> {show(r.finalStatus)}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                        <button
+                            onClick={() => setOpenModal(true)}
+                            className="self-end text-sm text-blue-600 hover:underline"
+                        >
+                            View Details
+                        </button>
+                    </div>
                 </div>
+
+                {/* Modal for details */}
+                <Dialog
+                    open={openModal}
+                    onClose={() => setOpenModal(false)}
+                    className="fixed inset-0 z-50 flex items-center justify-center"
+                >
+                    <Dialog.Overlay className="fixed inset-0 bg-black/40" />
+                    <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full p-6 relative z-10">
+                        <Dialog.Title className="text-xl font-semibold mb-4">
+                            Certificate Details
+                        </Dialog.Title>
+
+                        {result ? (
+                            <div className="grid grid-cols-2 gap-4 text-sm max-h-[60vh] overflow-y-auto">
+                                <div><span className="font-medium">File:</span> {show(result.filename)}</div>
+                                <div><span className="font-medium">Uploaded:</span> {result.uploadedAt ? new Date(result.uploadedAt).toLocaleString() : "-"}</div>
+                                <div><span className="font-medium">Student Name:</span> {show(result.studentName)}</div>
+                                <div><span className="font-medium">Course:</span> {show(result.course)}</div>
+                                <div><span className="font-medium">Year of Passing:</span> {show(result.yearOfPass)}</div>
+                                <div><span className="font-medium">Institution:</span> {show(result.institution)}</div>
+                                <div><span className="font-medium">Certificate ID:</span> {show(result.certificateId)}</div>
+                                <div><span className="font-medium">Status:</span> {show(result.finalStatus)}</div>
+                                <div><span className="font-medium">File Hash:</span> {result.hash ? result.hash.slice(0, 16) + "..." : "-"}</div>
+                                <div><span className="font-medium">Confidence:</span> {show(result.confidence)}%</div>
+                                <div><span className="font-medium">Valid Format:</span> {show(result.validFormat)}</div>
+                                <div><span className="font-medium">Has QR Code:</span> {show(result.hasQr)}</div>
+                                <div><span className="font-medium">QR Content:</span> {Array.isArray(result.qrContent) && result.qrContent.length ? result.qrContent.join(", ") : "-"}</div>
+                                <div><span className="font-medium">Logo Verified:</span> {show(result.logoVerified)}</div>
+                                <div><span className="font-medium">Layout Verified:</span> {show(result.layoutVerified)}</div>
+                                <div><span className="font-medium">Duplicate Check:</span> {show(result.duplicateCheck)}</div>
+                                <div><span className="font-medium">Hash Match:</span> {show(result.hashMatch)}</div>
+                            </div>
+                        ) : (
+                            <p className="text-gray-500">No certificate uploaded yet.</p>
+                        )}
+
+                        <div className="mt-6 text-right">
+                            <button
+                                onClick={() => setOpenModal(false)}
+                                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </Dialog>
             </div>
         </div>
     );

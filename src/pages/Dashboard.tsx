@@ -48,16 +48,23 @@ export default function Dashboard() {
         { month: "May", verified: 500, fraud: 28, pending: 12 },
     ];
 
+    // Background classes (alternate)
+    const bgClasses = [
+        "bg-gradient-to-r from-cyan-400 to-blue-500 text-white", // aqua gradient
+        "bg-blue-100 text-blue-900", // pale blue
+    ];
+
     return (
         <div>
             {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-                {stats.map((s) => (
+                {stats.map((s, idx) => (
                     <StatCard
                         key={s.title}
                         title={s.title}
                         value={s.value}
                         icon={s.icon}
+                        className={`${bgClasses[idx % 2]} rounded-2xl shadow-md`}
                     />
                 ))}
             </div>

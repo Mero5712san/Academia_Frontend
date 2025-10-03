@@ -6,7 +6,6 @@ import {
     DashboardIcon,
     ProfileIcon,
     RecentIcon,
-    SettingsIcon,
     VerifyIcon,
 } from "../assets";
 
@@ -15,7 +14,6 @@ const links = [
     { to: "/verify", label: "Verify Certificates", icon: VerifyIcon },
     { to: "/recents", label: "Recents", icon: RecentIcon },
     { to: "/alerts", label: "Alerts", icon: AlertIcon },
-    { to: "/settings", label: "Settings", icon: SettingsIcon },
     { to: "/profile", label: "Profile", icon: ProfileIcon },
 ];
 
