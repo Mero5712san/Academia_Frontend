@@ -15,43 +15,42 @@ import {
 
 export default function Dashboard() {
     // placeholder stats (replace with real data)
-    const stats = [
+      const stats = [
         {
             title: "Certificates scanned",
-            value: 12345,
+            value: 17,
             icon: <SuccessIcon color="white" />,
         },
         {
             title: "Frauds detected",
-            value: 157,
+            value: 6,
             icon: <FailedIcon color="white" />,
         },
-        { title: "Alerts", value: 29, icon: <EmergencyIcon color="white" /> },
-        { title: "Pending", value: 8, icon: <PendingIcon color="white" /> },
+        { title: "Alerts", value: 4, icon: <EmergencyIcon color="white" /> },
+        { title: "Pending", value: 9, icon: <PendingIcon color="white" /> },
     ];
 
-    // Dummy data for bar chart
+    // Adjusted (smaller) bar chart data based on counts
     const barData = [
-        { month: "Jan", scanned: 400, frauds: 24 },
-        { month: "Feb", scanned: 300, frauds: 13 },
-        { month: "Mar", scanned: 500, frauds: 35 },
-        { month: "Apr", scanned: 700, frauds: 20 },
-        { month: "May", scanned: 600, frauds: 15 },
+        { month: "Jan", scanned: 3, frauds: 1 },
+        { month: "Feb", scanned: 4, frauds: 0 },
+        { month: "Mar", scanned: 5, frauds: 2 },
+        { month: "Apr", scanned: 2, frauds: 1 },
+        { month: "May", scanned: 3, frauds: 2 },
     ];
 
-    // Dummy data for area chart
+    // Adjusted (smaller) area chart data for verified/fraud/pending trends
     const areaData = [
-        { month: "Jan", verified: 200, fraud: 20, pending: 10 },
-        { month: "Feb", verified: 300, fraud: 25, pending: 15 },
-        { month: "Mar", verified: 400, fraud: 30, pending: 20 },
-        { month: "Apr", verified: 350, fraud: 22, pending: 18 },
-        { month: "May", verified: 500, fraud: 28, pending: 12 },
+        { month: "Jan", verified: 2, fraud: 1, pending: 1 },
+        { month: "Feb", verified: 3, fraud: 0, pending: 2 },
+        { month: "Mar", verified: 4, fraud: 1, pending: 1 },
+        { month: "Apr", verified: 3, fraud: 2, pending: 1 },
+        { month: "May", verified: 5, fraud: 2, pending: 2 },
     ];
 
-    // Background classes (alternate)
     const bgClasses = [
-        "bg-gradient-to-r from-cyan-400 to-blue-500 text-white", // aqua gradient
-        "bg-blue-100 text-blue-900", // pale blue
+        "bg-gradient-to-r from-cyan-400 to-blue-500 text-white",
+        "bg-blue-100 text-blue-900",
     ];
 
     return (

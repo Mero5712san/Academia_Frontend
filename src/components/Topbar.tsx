@@ -33,6 +33,7 @@ export const Topbar = () => {
                 <div className="hidden md:block">
                     <input
                         placeholder="Type here..."
+                        name = "search"
                         className="px-4 py-2 rounded-full border border-gray-200 bg-white text-sm w-64 outline-none"
                     />
                 </div>

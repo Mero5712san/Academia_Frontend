@@ -28,7 +28,7 @@ export const loginUser = async (email, password) => {
 
 // Register API
 
-export const registerUser = async (name, email, password, role = "user") => {
+export const registerUser = async (name, email, password, role = "user", phone = "", location = "", institution = "", company = "") => {
     try {
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
             method: "POST",
@@ -36,7 +36,7 @@ export const registerUser = async (name, email, password, role = "user") => {
                 "Content-Type": "application/json",
                 accept: "application/json",
             },
-            body: JSON.stringify({ name, email, password, role }),
+            body: JSON.stringify({ name, email, password, role, phone, location, institution, company }),
         });
 
         if (!response.ok) {
@@ -50,6 +50,7 @@ export const registerUser = async (name, email, password, role = "user") => {
         throw error;
     }
 };
+
 
 
 // Upload certificate for verification
